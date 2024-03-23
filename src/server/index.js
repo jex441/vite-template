@@ -69,35 +69,35 @@ passport.deserializeUser(function (obj, done) {
 	done(null, obj);
 });
 
-passport.use(
-	new GoogleStrategy(
-		{
-			clientID: GOOGLE_OAUTH_APP_CLIENT_ID,
-			clientSecret: GOOGLE_OAUTH_APP_CLIENT_SECRET,
-			callbackURL: GOOGLE_OAUTH_APP_CALLBACK_URL,
-			scope: ["https://www.googleapis.com/auth/userinfo.email"],
-		},
-		async function (accessToken, refreshToken, profile, cb) {
-			const email = profile.emails[0].value;
-			const username = email.split("@")[0];
-			const [user, created] = await User.findOrCreate({
-				where: { email: email },
-				defaults: {
-					username: username,
-					email: profile.emails[0].value,
-					googleID: profile.id,
-					avatar: profile.photos[0].value,
-					verifiedThru: "google",
-				},
-			});
-			if (created) {
-				console.log("user id", user.id);
-				await addToSandbox(user.id);
-			}
-			return cb(null, user);
-		}
-	)
-);
+// passport.use(
+// 	new GoogleStrategy(
+// 		{
+// 			clientID: GOOGLE_OAUTH_APP_CLIENT_ID,
+// 			clientSecret: GOOGLE_OAUTH_APP_CLIENT_SECRET,
+// 			callbackURL: GOOGLE_OAUTH_APP_CALLBACK_URL,
+// 			scope: ["https://www.googleapis.com/auth/userinfo.email"],
+// 		},
+// 		async function (accessToken, refreshToken, profile, cb) {
+// 			const email = profile.emails[0].value;
+// 			const username = email.split("@")[0];
+// 			const [user, created] = await User.findOrCreate({
+// 				where: { email: email },
+// 				defaults: {
+// 					username: username,
+// 					email: profile.emails[0].value,
+// 					googleID: profile.id,
+// 					avatar: profile.photos[0].value,
+// 					verifiedThru: "google",
+// 				},
+// 			});
+// 			if (created) {
+// 				console.log("user id", user.id);
+// 				await addToSandbox(user.id);
+// 			}
+// 			return cb(null, user);
+// 		}
+// 	)
+// );
 
 app.get("/api/test", function (req, res) {
 	return res.send(200);
