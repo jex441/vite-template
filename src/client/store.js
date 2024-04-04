@@ -6,14 +6,11 @@ const initialState = {
 		? JSON.parse(localStorage.user)
 		: {
 				isLoggedIn: false,
-				access: false,
-				info: {
-					id: null,
-					username: "",
-					avatar: "",
-					verifiedThru: "",
-					email: "",
-				},
+				id: null,
+				username: "",
+				avatar: "",
+				verifiedThru: "",
+				email: "",
 		  },
 };
 
