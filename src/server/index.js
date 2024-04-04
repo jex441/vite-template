@@ -1,7 +1,6 @@
 import express from "express";
 import passport from "passport";
 import session from "express-session";
-import GoogleStrategy from "passport-google-oauth20";
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
 import path from "path";
@@ -9,7 +8,6 @@ import "dotenv/config";
 import SequelizeStore from "connect-session-sequelize";
 
 import db from "../db/index.js";
-import { User } from "../db/models/index.js";
 
 import users from "./lib/users.js";
 
@@ -68,53 +66,6 @@ passport.serializeUser(function (user, cb) {
 passport.deserializeUser(function (obj, done) {
 	done(null, obj);
 });
-
-// passport.use(
-// 	new GoogleStrategy(
-// 		{
-// 			clientID: GOOGLE_OAUTH_APP_CLIENT_ID,
-// 			clientSecret: GOOGLE_OAUTH_APP_CLIENT_SECRET,
-// 			callbackURL: GOOGLE_OAUTH_APP_CALLBACK_URL,
-// 			scope: ["https://www.googleapis.com/auth/userinfo.email"],
-// 		},
-// 		async function (accessToken, refreshToken, profile, cb) {
-// 			const email = profile.emails[0].value;
-// 			const username = email.split("@")[0];
-// 			const [user, created] = await User.findOrCreate({
-// 				where: { email: email },
-// 				defaults: {
-// 					username: username,
-// 					email: profile.emails[0].value,
-// 					googleID: profile.id,
-// 					avatar: profile.photos[0].value,
-// 					verifiedThru: "google",
-// 				},
-// 			});
-// 			if (created) {
-// 				console.log("user id", user.id);
-// 				await addToSandbox(user.id);
-// 			}
-// 			return cb(null, user);
-// 		}
-// 	)
-// );
-
-app.get("/api/test", function (req, res) {
-	return res.send(200);
-});
-
-app.get("/api/auth/google", passport.authenticate("google"));
-
-app.get(
-	"/api/auth/google/callback",
-	passport.authenticate("google", {
-		failureRedirect: "/login",
-		failureMessage: true,
-	}),
-	function (req, res) {
-		res.redirect("/");
-	}
-);
 
 app.get("/api/auth/logout", function (req, res) {
 	req.logout(function (err) {
